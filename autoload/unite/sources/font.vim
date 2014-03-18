@@ -21,6 +21,11 @@ function! s:unite_source.hooks.on_close(args, context)
 endfunction
 
 function! s:unite_source.gather_candidates(args, context)
+  let current_fontsize = matchstr(&guifont, '\d\+$')
+  if current_fontsize
+    let fontsize = ' ' . current_fontsize
+  endif
+
   if has('gui_macvim')
     let list = split(glob('/Library/Fonts/*'), "\n")
     let list = extend(list, split(glob('/System/Library/Fonts/*'), "\n"))
@@ -32,7 +37,7 @@ function! s:unite_source.gather_candidates(args, context)
     " 'fc-list' for win32 is included 'gtk win32 runtime'.
     " see: http://www.gtk.org/download-windows.html
     let list = split(iconv(system('fc-list :spacing=mono'), 'utf-8', &encoding), "\n")
-    if v:lang =~ '^\(ja\|ko\|zh\)' 
+    if v:lang =~ '^\(ja\|ko\|zh\)'
       let list += split(iconv(system('fc-list :spacing=90'), 'utf-8', &encoding), "\n")
     endif
     call map(list, "substitute(v:val, '[:,].*', '', '')")
@@ -45,7 +50,7 @@ function! s:unite_source.gather_candidates(args, context)
   \ "word": v:val,
   \ "source": "font",
   \ "kind": "command",
-  \ "action__command": "let &guifont=" . string(v:val),
+  \ "action__command": "let &guifont=" . string(v:val . fontsize)
   \ }')
 endfunction
 
