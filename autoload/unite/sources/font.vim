@@ -23,7 +23,7 @@ endfunction
 function! s:unite_source.gather_candidates(args, context)
   let current_fontsize = matchstr(&guifont, '\d\+$')
   if current_fontsize
-    let fontsize = ' ' . current_fontsize
+    let fontsize = '\, ' . current_fontsize
   endif
 
   if exists('g:unite_font_list_command')
